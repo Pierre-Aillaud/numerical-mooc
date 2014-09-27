@@ -7,6 +7,14 @@ Created on Tue Sep 23 19:16:43 2014
 
 import numpy
 import matplotlib.pyplot as plt
+
+def euler(u,z,dt):
+    """Use Euler's method to solve the system of two first order ODE"""
+    N = len(z)
+    for n in range(1,N):
+     u = u + dt*numpy.array([u[1],g*(1-u[0]/zt)])
+     z[n] = u[0]
+    return z
     
 def get_error(z, dt):
     """Returns the error relative to analytical solution using L-1 norm.
@@ -49,9 +57,7 @@ z = numpy.zeros(N)
 z[0] = z0
 
 #time-loop using Euler's method
-for n in range(1,N):
-    u = u + dt*numpy.array([u[1],g*(1-u[0]/zt)])
-    z[n] = u[0]
+euler(u,z,dt)
 
 #Exact solution
 z_exact = v*(zt/g)**.5*numpy.sin((g/zt)**.5*t)+\
@@ -83,10 +89,7 @@ for i, dt in enumerate(dt_values):
     z[0] = z0
     
     # time loop - Euler method
-    for n in range(1,N):
-        ### compute next solution using Euler method ###
-        u = u + dt*numpy.array([u[1], g*(1-u[0]/zt)])
-        z[n] = u[0]   # store the elevation at time-step n+1
+    euler(u,z,dt)
     
     z_values[i] = z.copy()    # store the total elevation calculation grid i
     
